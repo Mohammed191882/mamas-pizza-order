@@ -106,7 +106,6 @@
   <p class="muted">Images needed in same folder:  
   <code>pizza-base.png</code>, <code>topping-cheese.png</code>, <code>topping-veg-few.png</code>, <code>topping-corn.png</code>, <code>topping-chicken-small.png</code>, <code>topping-olives.png</code></p>
 </div>
-
 <script>
 /* ---------- CONFIG ---------- */
 const PRICES = { Small:150, Medium:250, Large:350, topping:30 };
@@ -169,21 +168,32 @@ function sectionHTML(i){
 function drawLayers(i){
   const stageId=id=>document.getElementById(`img_${i}_${id}`);
   const sizeSel=document.querySelector(`[name='pizza${i}_size']`);
+
   // base shows only if size chosen
   if(sizeSel && sizeSel.value){
     stageId("base").src=IMG.base;
     stageId("base").style.display="block";
+    stageId("base").style.transform="scale(1.1)"; // 🔥 make base 10% bigger
   } else {
     stageId("base").removeAttribute("src");
     stageId("base").style.display="none";
   }
+
   // toppings
   const boxes=document.querySelectorAll(`#pz${i} [type="checkbox"]`);
   const active=new Set([...boxes].filter(b=>b.checked).map(b=>b.dataset.layer));
   ["cheese","veg","corn","chicken","olives"].forEach((layer,index)=>{
     const el=stageId(layer);
-    if(active.has(layer)){el.src=IMG[layer];el.style.display="block";el.style.zIndex=index+1;}
-    else{el.removeAttribute("src");el.style.display="none";}
+    if(active.has(layer)){
+      el.src=IMG[layer];
+      el.style.display="block";
+      el.style.zIndex=index+1;
+      el.style.transform="scale(0.8)"; // toppings stay normal size
+    }
+    else{
+      el.removeAttribute("src");
+      el.style.display="none";
+    }
   });
 }
 
@@ -217,7 +227,10 @@ function updateTotals(){
     if(COUPONS[coupon]<1){
       let disc=Math.round(total*COUPONS[coupon]);
       total-=disc; summary.push(`Coupon ${coupon}: -₹${disc}`);
-    }else{total-=COUPONS[coupon]; summary.push(`Coupon ${coupon}: -₹${COUPONS[coupon]}`);}
+    }else{
+      total-=COUPONS[coupon];
+      summary.push(`Coupon ${coupon}: -₹${COUPONS[coupon]}`);
+    }
   }
 
   // include address if present
