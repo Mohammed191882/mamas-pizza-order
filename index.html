@@ -19,10 +19,6 @@
       --muted: #6b7280;
     }
 
-    * {
-      box-sizing: border-box
-    }
-
     body {
       font-family: 'Baloo 2', cursive;
       background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
@@ -33,109 +29,74 @@
     header {
       background: var(--brand);
       color: #fff;
-      text-align: center;
-      padding: 24px;
-      font-size: 32px;
+      padding: 20px;
+      font-size: 28px;
       font-weight: 700;
       letter-spacing: 1px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
+      display: flex;
+      justify-content: center; /* center align Mama’s Pizza text */
+      align-items: center;
+      position: relative;
+    }
+
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .download-btn {
+      position: absolute;
+      right: 20px;
+      background: #ffeb3b;
+      color: black;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.3s;
+    }
+
+    header .download-btn:hover {
+      background: #fdd835; /* hover: darker yellow */
+    }
+
+    header .download-btn img {
+      width: 18px;
+      height: 18px;
     }
 
     .container {
       max-width: 1000px;
-      margin: 24px auto;
+      margin: 40px auto;
       background: var(--card);
-      padding: 28px;
+      padding: 40px;
       border-radius: 20px;
       box-shadow: 0 6px 18px rgba(0, 0, 0, .15);
+      text-align: center;
     }
 
-    h2,
-    h3 {
+    h2 {
       color: var(--brand-dark);
-      text-align: center;
-      margin-bottom: 20px
+      margin-bottom: 30px;
     }
 
-    .grid {
-      display: grid;
-      gap: 18px;
-      margin-top: 20px;
-    }
-
-    .pizza-section {
-      border: 2px solid var(--accent);
-      border-radius: 16px;
-      padding: 16px;
-      background: var(--bg);
-    }
-
-    .preview-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      align-items: center
-    }
-
-    @media(max-width:800px) {
-      .preview-wrap {
-        grid-template-columns: 1fr
-      }
-    }
-
-    .stage {
-      margin: auto;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    .layer {
-      position: absolute;
-      inset: 0;
-      object-fit: contain;
-      width: 100%;
-      height: 100%;
-      display: none;
-    }
-
-    .controls label {
-      display: block;
-      margin: 6px 0
-    }
-
-    select,
-    input[type="number"],
-    input[type="text"],
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
-      font-family: 'Baloo 2', cursive
-    }
-
-    textarea {
-      resize: none
-    }
-
-    .total {
-      margin-top: 20px;
-      font-size: 24px;
-      font-weight: 700;
-      text-align: center;
-      color: var(--ok)
+    .actions {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .btn1,
     .btn2 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
+      flex: 1;
+      min-width: 200px;
       padding: 14px;
       font-size: 18px;
       font-weight: 600;
@@ -144,90 +105,40 @@
       cursor: pointer;
       transition: 0.3s;
       text-decoration: none;
+      color: white;
+      text-align: center;
     }
 
-    /* Copy Order button */
     .btn1 {
       background-color: var(--brand);
-      /* orange */
-      color: white;
     }
 
     .btn1:hover {
-      background-color: var(--brand);
+      background-color: var(--brand-dark);
     }
 
-    /* WhatsApp button */
     .btn2 {
       background-color: #25d366;
-      /* WhatsApp green */
-      color: white;
     }
 
     .btn2:hover {
       background-color: #1ebc59;
-    }
-
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 12px
-    }
-
-    .actions a {
-      flex: 1;
-      text-decoration: none
-    }
-
-    .muted {
-      opacity: .8;
-      font-size: 14px;
-      text-align: center;
-      margin-top: 12px;
-      color: var(--muted)
-    }
-
-    /* For WebKit browsers (Chrome, Edge, Safari) */
-    ::-webkit-scrollbar {
-      width: 12px;
-      /* scrollbar width */
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #f0f0f0;
-      /* track color */
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #ff9d3f, #ff6b00);
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #ffb35f, #ff8533);
-    }
-
-    /* For Firefox */
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: #ff6b00 #f0f0f0;
     }
   </style>
 </head>
 
 <body>
   <header>
-    <span>
-      <img src="mamas-pizza-logo.png" alt="Mama's Pizza Logo" width="50" height="50" style="vertical-align: middle;">
-    </span>
-    <span style="font-size: 30px; vertical-align: middle;">Mama's Pizza Shop</span>
+    <div class="logo">
+      <img src="mamas-pizza-logo.png" alt="Mama's Pizza Logo" width="40" height="40">
+      <span>Mama's Pizza Shop</span>
+    </div>
+    <a href="MamasPizza_Menu.pdf" download="MamasPizza_Menu.pdf" target="_blank" class="download-btn">
+      <img src="download-icon.png" alt="Download"> Download Menu
+    </a>
   </header>
 
-  <div class="container"> 
+  <div class="container">
     <h2>Welcome to Mama's Pizza Shop</h2>
     <div class="actions">
       <a href="menu.html" class="btn1">Order Through Menu</a>
