@@ -24,8 +24,8 @@
     }
 
     body {
-      font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+      font-family: 'Baloo 2', cursive;      
+      background: var(--bg);
       margin: 0;
       color: #333;
     }
@@ -39,6 +39,17 @@
       font-weight: 700;
       letter-spacing: 1px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: row;
+      }
     }
 
     .container {
@@ -357,6 +368,86 @@
 
     .centerAction {
       text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px;
+        font-size: 24px;
+      }
+
+      header span img {
+        width: 35px;
+        height: 35px;
+      }
+
+      header span:last-child {
+        font-size: 24px;
+      }
+
+      .container {
+        margin: 15px auto;
+        padding: 15px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      th, td {
+        padding: 8px 10px;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+
+      #cart h3 {
+        font-size: 24px;
+      }
+
+      #cart table {
+        font-size: 14px;
+      }
+
+      #cart th, #cart td {
+        padding: 8px 10px;
+      }
+
+      .cart-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .total {
+        font-size: 20px;
+      }
+
+      .btn1, .btn2 {
+        padding: 12px;
+        font-size: 16px;
+      }
+
+      .actions {
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      table, #cart table {
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+
+      th, td {
+        min-width: 80px;
+      }
+
+      #cart th, #cart td {
+        min-width: 80px;
+      }
     }
   </style>
 </head>

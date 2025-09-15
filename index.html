@@ -21,7 +21,7 @@
 
     body {
       font-family: 'Baloo 2', cursive;
-      background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+      background: var(--bg);
       margin: 0;
       color: #333;
     }
@@ -35,7 +35,8 @@
       letter-spacing: 1px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
       display: flex;
-      justify-content: center; /* center align Mama’s Pizza text */
+      justify-content: center;
+      /* center align Mama’s Pizza text */
       align-items: center;
       position: relative;
     }
@@ -63,7 +64,8 @@
     }
 
     header .download-btn:hover {
-      background: #fdd835; /* hover: darker yellow */
+      background: #fdd835;
+      /* hover: darker yellow */
     }
 
     header .download-btn img {
@@ -124,10 +126,44 @@
     .btn2:hover {
       background-color: #1ebc59;
     }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px;
+        font-size: 20px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      header .logo {
+        flex-direction: row;
+        gap: 5px;
+      }
+
+      header .download-btn {
+        position: static;
+        align-self: center;
+      }
+
+      .container {
+        margin: 20px auto;
+        padding: 20px;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .btn1,
+      .btn2 {
+        min-width: unset;
+      }
+    }
   </style>
 </head>
 
-<body>
+<body class="">
   <header>
     <div class="logo">
       <img src="mamas-pizza-logo.png" alt="Mama's Pizza Logo" width="40" height="40">
@@ -138,13 +174,16 @@
     </a>
   </header>
 
-  <div class="container">
-    <h2>Welcome to Mama's Pizza Shop</h2>
-    <div class="actions">
-      <a href="menu.html" class="btn1">Order Through Menu</a>
-      <a href="custom-order.html" class="btn2">Order Custom Pizzas</a>
+  <section>
+    <div class="container">
+      <h2>Welcome to Mama's Pizza Shop</h2>
+      <div class="actions">
+        <a href="menu.html" class="btn1">Order Through Menu</a>
+        <a href="custom-order.html" class="btn2">Order Custom Pizzas</a>
+      </div>
     </div>
-  </div>
+  </section>
+
 </body>
 
 </html>

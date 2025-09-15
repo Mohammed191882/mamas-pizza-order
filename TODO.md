@@ -1,5 +1,4 @@
-# TODO: Add Back Button to Both Pages
-
-- [ ] Add back button to index.html (linking to menu.html)
-- [ ] Add back button to custom-order.html (linking to index.html)
-- [ ] Verify styling and navigation
+- [x] Update index.html for mobile responsiveness: adjust header font size, download button positioning, container padding
+- [x] Update custom-order.html for mobile responsiveness: adjust header font size, container padding, stage sizes
+- [x] Update menu.html for mobile responsiveness: adjust header font size, container padding, make tables scrollable
+- [ ] Test the pages for mobile responsiveness
