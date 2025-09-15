@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mama's Pizza Shop - Custom Order</title>
+  <link rel="shortcut icon" href="mamas-pizza-logo.png" type="image/x-icon">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap');
+
+    :root {
+      --brand: #e53935;
+      --brand-dark: #c62828;
+      --accent: #ffca28;
+      --bg: #fff3e0;
+      --card: #fff;
+      --ok: #2e7d32;
+      --muted: #6b7280;
+    }
+
+    * { box-sizing: border-box }
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+      margin: 0;
+      color: #333;
+    }
+
+    header {
+      background: var(--brand);
+      color: #fff;
+      text-align: center;
+      padding: 24px;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 24px auto;
+      background: var(--card);
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .15);
+    }
+
+    h2,h3 { color: var(--brand-dark); text-align: center; margin-bottom: 20px }
+
+    .grid { display: grid; gap: 18px; margin-top: 20px; }
+
+    .pizza-section {
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 16px;
+      background: var(--bg);
+    }
+
+    .preview-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: center }
+    @media(max-width:800px) { .preview-wrap { grid-template-columns: 1fr } }
+
+    .stage {
+      margin: auto;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .layer { position: absolute; inset: 0; object-fit: contain; width: 100%; height: 100%; display: none; }
+
+    .controls label { display: block; margin: 6px 0 }
+
+    select, input[type="number"], input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'Baloo 2', cursive
+    }
+
+    textarea { resize: none }
+
+    .total { margin-top: 20px; font-size: 24px; font-weight: 700; text-align: center; color: var(--ok) }
+
+    .btn1, .btn2 {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; padding: 14px; font-size: 18px; font-weight: 600;
+      border: none; border-radius: 12px; cursor: pointer; transition: 0.3s; text-decoration: none;
+    }
+
+    .btn1 { background-color: var(--brand); color: white; }
+    .btn1:hover { background-color: var(--brand); }
+    .btn2 { background-color: #25d366; color: white; }
+    .btn2:hover { background-color: #1ebc59; }
+
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 12px }
+    .actions a { flex: 1; text-decoration: none }
+
+    .muted { opacity: .8; font-size: 14px; text-align: center; margin-top: 12px; color: var(--muted) }
+
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: #f0f0f0; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #ff9d3f, #ff6b00); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #ffb35f, #ff8533); }
+    * { scrollbar-width: thin; scrollbar-color: #ff6b00 #f0f0f0; }
+
+    .back-btn {
+      display: inline-block; padding: 10px 20px; background-color: #25d366; color: white;
+      text-decoration: none; border-radius: 10px; font-size: 16px; margin-bottom: 0; transition: background-color 0.3s ease;
+    }
+    .back-btn:hover { background-color: #1ebc59; }
+
+    .header-row { position: relative; text-align: center; margin-bottom: 20px; }
+    .header-row h2 { margin: 0; }
+    .back-btn { position: absolute; left: 0; top: 50%; transform: translateY(-50%); }
+  </style>
+</head>
+
+<body>
+  <header>
+    <span><img src="mamas-pizza-logo.png" alt="Mama's Pizza Logo" width="50" height="50" style="vertical-align: middle;"></span>
+    <span style="font-size: 30px; vertical-align: middle;">Mama's Pizza Shop</span>
+  </header>
+
+  <div class="container">
+    <div class="header-row">
+        <a href="index.html" class="back-btn">&#8592; Back</a>
+        <h2>Build Your Pizza Order</h2>
+    </div>
+
+    <form id="orderForm" oninput="updateTotals()">
+      <h3>How many pizzas?</h3>
+      <input type="number" id="pizzaCount" name="pizzaCount" min="1" max="5" value="1" onchange="renderPizzas()" required>
+      <div id="pizzaForms" class="grid"></div>
+
+      <h3>Delivery Address</h3>
+      <textarea name="address" id="address" rows="3" required placeholder="House / Street / City / Phone"></textarea>
+
+      <h3>Coupon Code (optional)</h3>
+      <input type="text" id="coupon" placeholder="Enter coupon code" oninput="updateTotals()">
+
+      <div class="total" id="grandTotal">Total: ₹0</div>
+      <input type="hidden" name="orderSummary" id="orderSummary">
+
+      <div class="actions">
+        <button type="button" class="btn1" onclick="copyOrder()">📋 Copy Order</button>
+        <a id="waLink" class="btn2" target="_blank">
+          <img src="whatsapp_icon.png" alt="WhatsApp" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
+          Send via WhatsApp
+        </a>
+      </div>
+    </form>
+  </div>
+
+<script>
+  /* ---------- CONFIG ---------- */
+  const PRICES = { Small: 130, Large: 220, topping: 3, cheese: 25, chicken: 50, chickenOverload: 55, cornOverload: 10 };
+
+  const TOPPINGS = [
+    { layer: "chicken", name: "Chicken" },
+    { layer: "cheese", name: "Cheese" },
+    { layer: "corn", name: "Corn" },
+    { layer: "olives", name: "Olives" },
+    { layer: "onions", name: "Onions" },
+    { layer: "capsicum", name: "Capsicum" },
+    { layer: "tomato", name: "Tomato" },
+  ];
+
+  const TOPPING_PRICES = {
+    Small: {
+      "Cheese": 15,
+      "Chicken": 45,
+      "Chicken Overload": 30,
+      "Corn": 2,
+      "Corn Overload": 10,
+      "Olives": 2,
+      "Onions": 2,
+      "Capsicum": 2,
+      "Tomato": 2,
+    },
+    Large: {
+      "Cheese": PRICES.cheese,
+      "Chicken": PRICES.chicken,
+      "Chicken Overload": PRICES.chickenOverload,
+      "Corn": PRICES.topping,
+      "Corn Overload": PRICES.cornOverload,
+      "Olives": PRICES.topping,
+      "Onions": PRICES.topping,
+      "Capsicum": PRICES.topping,
+      "Tomato": PRICES.topping,
+    }
+  };
+
+  const COUPONS = { SAVE50: 50, WELCOME10: 0.10 };
+
+  const IMG = {
+    base: "pizza-base.png",
+    cheese: "topping-cheese.png",
+    corn: "topping-corn.png",
+    chicken: "topping-chicken-small.png",
+    olives: "topping-olives.png",
+    onions: "topping-onions.png",
+    capsicum: "topping-capsicum.png",
+    tomato: "topping-tomato.png"
+  };
+
+  const LAYER_ORDER = ["base", "cheese", "corn", "onions", "capsicum", "tomato", "chicken", "olives"];
+  const SIZE_DIM = { Small: 180, Medium: 240, Large: 300 };
+
+  /* ---------- RENDER ---------- */
+  function renderPizzas() {
+    const n = +document.getElementById('pizzaCount').value || 1;
+    const wrap = document.getElementById('pizzaForms');
+    wrap.innerHTML = "";
+    for (let i = 1; i <= n; i++) {
+      wrap.insertAdjacentHTML("beforeend", sectionHTML(i));
+      drawLayers(i);
+    }
+    updateTotals();
+  }
+
+  function sectionHTML(i) {
+    return `
+  <div class="pizza-section" id="pz${i}">
+    <h4>Pizza ${i}</h4>
+    <div class="preview-wrap">
+      <div class="stage" id="stage${i}">
+        ${LAYER_ORDER.map((layer, zi) => `<img class="layer" style="z-index:${zi};" id="img_${i}_${layer}" alt="${layer}" />`).join("")}
+      </div>
+      <div class="controls">
+        <label>Size:
+          <select name="pizza${i}_size" required onchange="resizePizza(${i}, this.value); updateTotals()">
+            <option value="">-- Select Size --</option>
+            <option value="Small">Small (₹${PRICES.Small})</option>
+            <option value="Large">Large (₹${PRICES.Large})</option>
+          </select>
+        </label>
+        ${(() => {
+          let labels = '';
+          TOPPINGS.forEach(t => {
+            if (t.layer === 'chicken') {
+              labels += `<div style="margin:6px 0;">
+                <label style="display:inline-block; margin-right:10px;">
+                  <input type="checkbox" id="chicken${i}" data-layer="chicken" name="pizza${i}_toppings" value="Chicken" onchange="toggleOverload(${i}, 'chicken');drawLayers(${i});updateTotals()">
+                  Chicken
+                </label>
+                <label id="chickenOverloadLabel${i}" style="display:none;">
+                  <input type="checkbox" id="chickenOverload${i}" name="pizza${i}_toppings" value="Chicken Overload" onchange="updateTotals()">
+                  Chicken Overload
+                </label>
+              </div>`;
+            } else if (t.layer === 'corn') {
+              labels += `<div style="margin:6px 0;">
+                <label style="display:inline-block; margin-right:10px;">
+                  <input type="checkbox" id="corn${i}" data-layer="corn" name="pizza${i}_toppings" value="Corn" onchange="toggleOverload(${i}, 'corn');drawLayers(${i});updateTotals()">
+                  Corn
+                </label>
+                <label id="cornOverloadLabel${i}" style="display:none;">
+                  <input type="checkbox" id="cornOverload${i}" name="pizza${i}_toppings" value="Corn Overload" onchange="updateTotals()">
+                  Corn Overload
+                </label>
+              </div>`;
+            } else {
+              labels += `<label>
+                <input type="checkbox" data-layer="${t.layer}" name="pizza${i}_toppings" value="${t.name}" onchange="drawLayers(${i});updateTotals()">
+                ${t.name}
+              </label>`;
+            }
+          });
+          return labels;
+        })()}
+      </div>
+    </div>
+  </div>`;
+  }
+
+  /* ---------- PREVIEW ---------- */
+  function drawLayers(i) {
+    const stageId = id => document.getElementById(`img_${i}_${id}`);
+    const sizeSel = document.querySelector(`[name='pizza${i}_size']`);
+    if (sizeSel && sizeSel.value) {
+      stageId("base").src = IMG.base;
+      stageId("base").style.display = "block";
+      stageId("base").style.transform = "scale(1.1)";
+    } else {
+      stageId("base").removeAttribute("src");
+      stageId("base").style.display = "none";
+    }
+    const boxes = document.querySelectorAll(`#pz${i} [type="checkbox"]`);
+    const active = new Set([...boxes].filter(b => b.checked).map(b => b.dataset.layer));
+    ["cheese", "corn", "chicken", "olives", "onions", "capsicum", "tomato"].forEach((layer, index) => {
+      const el = stageId(layer);
+      if (!el) return;
+      if (active.has(layer)) {
+        el.src = IMG[layer];
+        el.style.display = "block";
+        el.style.zIndex = index + 1;
+        el.style.transform = "scale(0.8)";
+      } else {
+        el.removeAttribute("src");
+        el.style.display = "none";
+      }
+    });
+  }
+
+  function resizePizza(i, size) {
+    const stage = document.getElementById(`stage${i}`);
+    if (size && SIZE_DIM[size]) {
+      stage.style.width = SIZE_DIM[size] + "px";
+      stage.style.height = SIZE_DIM[size] + "px";
+    } else {
+      stage.style.width = "0px"; stage.style.height = "0px";
+    }
+    updateToppingLabels(i, size);
+    drawLayers(i);
+  }
+
+  function updateToppingLabels(i, size) {
+    const boxes = document.querySelectorAll(`#pz${i} [name='pizza${i}_toppings']`);
+    boxes.forEach(box => {
+      const topping = box.value;
+      const label = box.parentElement;
+      if (!size) {
+        label.lastChild.textContent = ` ${topping}`;
+      } else {
+        const price = TOPPING_PRICES[size]?.[topping];
+        if (price !== undefined) label.lastChild.textContent = ` ${topping} (+₹${price})`;
+      }
+    });
+  }
+
+  function updateTotals() {
+    let n = +document.getElementById('pizzaCount').value || 1;
+    let total = 0, summary = [];
+    for (let i = 1; i <= n; i++) {
+      const sizeSel = document.querySelector(`[name='pizza${i}_size']`);
+      if (!sizeSel || !sizeSel.value) continue;
+      let price = PRICES[sizeSel.value];
+      const toppings = [...document.querySelectorAll(`#pz${i} [name='pizza${i}_toppings']:checked`)].map(b => b.value);
+      toppings.forEach(t => { price += TOPPING_PRICES[sizeSel.value]?.[t] ?? 0; });
+      total += price;
+      summary.push(`Pizza ${i}: ${sizeSel.value} + ${toppings.join(", ") || "No extra"} = ₹${price}`);
+    }
+    let coupon = document.getElementById("coupon").value.trim().toUpperCase();
+    if (coupon && COUPONS[coupon]) {
+      if (COUPONS[coupon] < 1) {
+        let disc = Math.round(total * COUPONS[coupon]);
+        total -= disc; summary.push(`Coupon ${coupon}: -₹${disc}`);
+      } else {
+        total -= COUPONS[coupon];
+        summary.push(`Coupon ${coupon}: -₹${COUPONS[coupon]}`);
+      }
+    }
+    const addr = document.getElementById('address').value.trim();
+    if (addr) summary.push(`Address: ${addr}`);
+    const finalSummary = summary.join("\n") + `\nTotal = ₹${total}`;
+    document.getElementById('grandTotal').textContent = `Total: ₹${total}`;
+    document.getElementById('orderSummary').value = finalSummary;
+    const wa = document.getElementById('waLink');
+    if (wa) wa.href = "https://wa.me/917349464989?text=" + encodeURIComponent(finalSummary);
+    return finalSummary;
+  }
+
+  function copyOrder() {
+    const text = updateTotals();
+    navigator.clipboard.writeText(text).then(() => alert("Order copied!"));
+  }
+
+  function toggleOverload(i, type) {
+    const mainBox = document.getElementById(`${type}${i}`);
+    const overloadLabel = document.getElementById(`${type}OverloadLabel${i}`);
+    const overloadBox = document.getElementById(`${type}Overload${i}`);
+    if (mainBox && overloadLabel) {
+      if (mainBox.checked) overloadLabel.style.display = "inline-block";
+      else { overloadLabel.style.display = "none"; if (overloadBox) overloadBox.checked = false; }
+    }
+  }
+
+  renderPizzas();
+</script>
+
+</body>
+</html>

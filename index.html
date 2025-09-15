@@ -189,6 +189,33 @@
       margin-top: 12px;
       color: var(--muted)
     }
+
+    /* For WebKit browsers (Chrome, Edge, Safari) */
+    ::-webkit-scrollbar {
+      width: 12px;
+      /* scrollbar width */
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      /* track color */
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ff9d3f, #ff6b00);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #ffb35f, #ff8533);
+    }
+
+    /* For Firefox */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #ff6b00 #f0f0f0;
+    }
   </style>
 </head>
 
@@ -200,187 +227,13 @@
     <span style="font-size: 30px; vertical-align: middle;">Mama's Pizza Shop</span>
   </header>
 
-  <div class="container">
-    <h2>Build Your Pizza Order</h2>
-
-    <form id="orderForm" oninput="updateTotals()">
-      <h3>How many pizzas?</h3>
-      <input type="number" id="pizzaCount" name="pizzaCount" min="1" max="5" value="1" onchange="renderPizzas()"
-        required>
-
-      <div id="pizzaForms" class="grid"></div>
-
-      <h3>Delivery Address</h3>
-      <textarea name="address" id="address" rows="3" required placeholder="House / Street / City / Phone"></textarea>
-
-      <h3>Coupon Code (optional)</h3>
-      <input type="text" id="coupon" placeholder="Enter coupon code" oninput="updateTotals()">
-
-      <div class="total" id="grandTotal">Total: ₹0</div>
-      <input type="hidden" name="orderSummary" id="orderSummary">
-
-      <div class="actions">
-        <button type="button" class="btn1" onclick="copyOrder()">📋 Copy Order</button>
-        <a id="waLink" class="btn2" target="_blank">
-          <img src="whatsapp_icon.png" alt="WhatsApp" width="24" height="24"
-            style="vertical-align: middle; margin-right: 8px;">
-          Send via WhatsApp
-        </a>
-      </div>
-
-
-    </form>
-  </div>
-  <script>
-    /* ---------- CONFIG ---------- */
-    const PRICES = { Small: 150, Medium: 250, Large: 350, topping: 30 };
-    const COUPONS = { SAVE50: 50, WELCOME10: 0.10 };
-
-    const IMG = {
-      base: "pizza-base.png",
-      cheese: "topping-cheese.png",
-      veg: "topping-veg-few.png",
-      corn: "topping-corn.png",
-      chicken: "topping-chicken-small.png",
-      olives: "topping-olives.png"   // NEW
-    };
-
-    // Cheese under everything else
-    const LAYER_ORDER = ["base", "cheese", "veg", "corn", "chicken", "olives"];
-    const SIZE_DIM = { Small: 180, Medium: 240, Large: 300 };
-
-    /* ---------- RENDER ---------- */
-    function renderPizzas() {
-      const n = +document.getElementById('pizzaCount').value || 1;
-      const wrap = document.getElementById('pizzaForms');
-      wrap.innerHTML = "";
-      for (let i = 1; i <= n; i++) {
-        wrap.insertAdjacentHTML("beforeend", sectionHTML(i));
-        drawLayers(i);
-      }
-      updateTotals();
-    }
-
-    function sectionHTML(i) {
-      return `
-  <div class="pizza-section" id="pz${i}">
-    <h4>Pizza ${i}</h4>
-    <div class="preview-wrap">
-      <div class="stage" id="stage${i}">
-        ${LAYER_ORDER.map((layer, zi) => `<img class="layer" style="z-index:${zi};" id="img_${i}_${layer}" alt="${layer}" />`).join("")}
-      </div>
-      <div class="controls">
-        <label>Size:
-          <select name="pizza${i}_size" required onchange="resizePizza(${i}, this.value); updateTotals()">
-            <option value="">-- Select Size --</option>
-            <option value="Small">Small (₹${PRICES.Small})</option>
-            <option value="Medium">Medium (₹${PRICES.Medium})</option>
-            <option value="Large">Large (₹${PRICES.Large})</option>
-          </select>
-        </label>
-
-        <label><input type="checkbox" data-layer="cheese"  name="pizza${i}_toppings" value="Cheese" onchange="drawLayers(${i});updateTotals()"> Cheese (+₹${PRICES.topping})</label>
-        <label><input type="checkbox" data-layer="veg"     name="pizza${i}_toppings" value="Vegetables" onchange="drawLayers(${i});updateTotals()"> Vegetables (+₹${PRICES.topping})</label>
-        <label><input type="checkbox" data-layer="corn"    name="pizza${i}_toppings" value="Corn" onchange="drawLayers(${i});updateTotals()"> Corn (+₹${PRICES.topping})</label>
-        <label><input type="checkbox" data-layer="chicken" name="pizza${i}_toppings" value="Chicken" onchange="drawLayers(${i});updateTotals()"> Chicken (+₹${PRICES.topping})</label>
-        <label><input type="checkbox" data-layer="olives"  name="pizza${i}_toppings" value="Olives" onchange="drawLayers(${i});updateTotals()"> Olives (+₹${PRICES.topping})</label>
-      </div>
+  <div class="container"> 
+    <h2>Welcome to Mama's Pizza Shop</h2>
+    <div class="actions">
+      <a href="menu.html" class="btn1">Order Through Menu</a>
+      <a href="custom-order.html" class="btn2">Order Custom Pizzas</a>
     </div>
-  </div>`;
-    }
-
-    /* ---------- PREVIEW ---------- */
-    function drawLayers(i) {
-      const stageId = id => document.getElementById(`img_${i}_${id}`);
-      const sizeSel = document.querySelector(`[name='pizza${i}_size']`);
-
-      // base shows only if size chosen
-      if (sizeSel && sizeSel.value) {
-        stageId("base").src = IMG.base;
-        stageId("base").style.display = "block";
-        stageId("base").style.transform = "scale(1.1)"; // 🔥 make base 10% bigger
-      } else {
-        stageId("base").removeAttribute("src");
-        stageId("base").style.display = "none";
-      }
-
-      // toppings
-      const boxes = document.querySelectorAll(`#pz${i} [type="checkbox"]`);
-      const active = new Set([...boxes].filter(b => b.checked).map(b => b.dataset.layer));
-      ["cheese", "veg", "corn", "chicken", "olives"].forEach((layer, index) => {
-        const el = stageId(layer);
-        if (active.has(layer)) {
-          el.src = IMG[layer];
-          el.style.display = "block";
-          el.style.zIndex = index + 1;
-          el.style.transform = "scale(0.8)"; // toppings stay normal size
-        }
-        else {
-          el.removeAttribute("src");
-          el.style.display = "none";
-        }
-      });
-    }
-
-    function resizePizza(i, size) {
-      const stage = document.getElementById(`stage${i}`);
-      if (size && SIZE_DIM[size]) {
-        stage.style.width = SIZE_DIM[size] + "px";
-        stage.style.height = SIZE_DIM[size] + "px";
-      } else {
-        stage.style.width = "0px"; // hide if size cleared
-        stage.style.height = "0px";
-      }
-      drawLayers(i);
-    }
-
-    /* ---------- TOTALS + WHATSAPP + COPY ---------- */
-    function updateTotals() {
-      let n = +document.getElementById('pizzaCount').value || 1;
-      let total = 0, summary = [];
-      for (let i = 1; i <= n; i++) {
-        const sizeSel = document.querySelector(`[name='pizza${i}_size']`);
-        if (!sizeSel || !sizeSel.value) continue;
-        let price = PRICES[sizeSel.value];
-        const toppings = [...document.querySelectorAll(`#pz${i} [name='pizza${i}_toppings']:checked`)].map(b => b.value);
-        price += PRICES.topping * toppings.length;
-        total += price;
-        summary.push(`Pizza ${i}: ${sizeSel.value} + ${toppings.join(", ") || "No extra"} = ₹${price}`);
-      }
-      let coupon = document.getElementById("coupon").value.trim().toUpperCase();
-      if (coupon && COUPONS[coupon]) {
-        if (COUPONS[coupon] < 1) {
-          let disc = Math.round(total * COUPONS[coupon]);
-          total -= disc; summary.push(`Coupon ${coupon}: -₹${disc}`);
-        } else {
-          total -= COUPONS[coupon];
-          summary.push(`Coupon ${coupon}: -₹${COUPONS[coupon]}`);
-        }
-      }
-
-      // include address if present
-      const addr = document.getElementById('address').value.trim();
-      if (addr) summary.push(`Address: ${addr}`);
-
-      const finalSummary = summary.join("\n") + `\nTotal = ₹${total}`;
-      document.getElementById('grandTotal').textContent = `Total: ₹${total}`;
-      document.getElementById('orderSummary').value = finalSummary;
-
-      // set WhatsApp link
-      const wa = document.getElementById('waLink');
-      if (wa) wa.href = "https://wa.me/917349464989?text=" + encodeURIComponent(finalSummary);
-
-      return finalSummary;
-    }
-
-    function copyOrder() {
-      const text = updateTotals();
-      navigator.clipboard.writeText(text).then(() => alert("Order copied!"));
-    }
-
-    /* init */
-    renderPizzas();
-  </script>
+  </div>
 </body>
 
 </html>

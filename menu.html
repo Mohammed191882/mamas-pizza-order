@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mama's Pizza Shop - Menu</title>
+  <link rel="shortcut icon" href="mamas-pizza-logo.png" type="image/x-icon">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap');
+
+    :root {
+      --brand: #e53935;
+      --brand-dark: #c62828;
+      --accent: #ffca28;
+      --bg: #fff3e0;
+      --card: #fff;
+      --ok: #2e7d32;
+      --muted: #6b7280;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+      margin: 0;
+      color: #333;
+    }
+
+    header {
+      background: var(--brand);
+      color: #fff;
+      text-align: center;
+      padding: 24px;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 24px auto;
+      background: var(--card);
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .15);
+    }
+
+    h2 {
+      color: var(--brand-dark);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      border: none;
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: var(--brand);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .price-cell {
+      text-align: center;
+      font-weight: 700;
+      color: var(--brand-dark);
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      background-color: var(--brand);
+      color: white;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(229, 57, 53, 0.6);
+    }
+
+    .btn:hover {
+      background-color: var(--brand-dark);
+      box-shadow: 0 6px 12px rgba(198, 40, 40, 0.8);
+    }
+
+    #cart {
+      margin-top: 40px;
+      background: var(--bg);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    #cart h3 {
+      color: var(--brand-dark);
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    #cart table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #cart th,
+    #cart td {
+      border: none;
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+    }
+
+    #cart th {
+      background-color: var(--brand);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    #cart tbody tr {
+      background: white;
+    }
+
+    #cart tbody tr:hover {
+      background: #f9f9f9;
+    }
+
+    .cart-qty-input {
+      width: 60px;
+      padding: 6px;
+      font-size: 16px;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      transition: border-color 0.3s ease;
+    }
+
+    .cart-qty-input:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 8px var(--brand);
+    }
+
+    .cart-btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: #c62828;
+      color: white;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(198, 40, 40, 0.6);
+    }
+
+    .cart-btn:hover {
+      background-color: #b71c1c;
+      box-shadow: 0 6px 12px rgba(183, 28, 28, 0.8);
+    }
+
+    .empty-cart {
+      text-align: center;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    .total {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--ok)
+    }
+
+    .btn1,
+    .btn2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    /* Copy Order button */
+    .btn1 {
+      background-color: var(--brand);
+      /* orange */
+      color: white;
+    }
+
+    .btn1:hover {
+      background-color: var(--brand);
+    }
+
+    /* WhatsApp button */
+    .btn2 {
+      background-color: #25d366;
+      /* WhatsApp green */
+      color: white;
+    }
+
+    .btn2:hover {
+      background-color: #1ebc59;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 12px
+    }
+
+    .actions a {
+      flex: 1;
+      text-decoration: none
+    }
+
+    #deliveryAddress {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      resize: vertical;
+      transition: border-color 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    #deliveryAddress:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 8px var(--brand);
+    }
+
+    #couponCode {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      transition: border-color 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    #couponCode:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 8px var(--brand);
+    }
+
+    
+    /* For WebKit browsers (Chrome, Edge, Safari) */
+    ::-webkit-scrollbar {
+      width: 12px;
+      /* scrollbar width */
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      /* track color */
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ff9d3f, #ff6b00);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #ffb35f, #ff8533);
+    }
+
+    /* For Firefox */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #ff6b00 #f0f0f0;
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #25d366;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #1ebc59;
+    }
+
+    .header-row {
+      position: relative;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header-row h2 {
+      margin: 0;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .centerAction {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <span>
+      <img src="mamas-pizza-logo.png" alt="Mama's Pizza Logo" width="50" height="50" style="vertical-align: middle;">
+    </span>
+    <span style="font-size: 30px; vertical-align: middle;">Mama's Pizza Shop</span>
+  </header>
+
+  <div class="container">
+    <div class="header-row">
+        <a href="index.html" class="back-btn">&#8592; Back</a>
+        <h2>Menu</h2>
+    </div>
+    <table id="menuTable">
+      <thead>
+        <tr>
+          <th>Pizza</th>
+          <th>Small</th>
+          <th>Large</th>
+          <th colspan="2" class="centerAction">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-pizza="Chicken Overload Pizza" data-large="349" data-small="219">
+          <td><img src="Chicken overload pizza.png" alt="Pizza" width="30" height="30" style="vertical-align: middle; margin-right: 10px;">Chicken Overload Pizza</td>
+          <td class="price-cell">₹219</td>
+          <td class="price-cell">₹349</td>
+          <td><button class="btn add-btn" data-size="small">Add Small</button></td>
+          <td><button class="btn add-btn" data-size="large">Add Large</button></td>
+        </tr>
+        <tr data-pizza="Classic Chicken Delight Pizza" data-large="299" data-small="199">
+          <td><img src="Chicken supreme delight.png" alt="Pizza" width="30" height="30" style="vertical-align: middle; margin-right: 10px;">Classic Chicken Delight Pizza</td>
+          <td class="price-cell">₹199</td>
+          <td class="price-cell">₹299</td>
+          <td><button class="btn add-btn" data-size="small">Add Small</button></td>
+          <td><button class="btn add-btn" data-size="large">Add Large</button></td>
+        </tr>
+        <tr data-pizza="Chicken & Corn Fusion Pizza" data-large="299" data-small="199">
+          <td><img src="chicken corn fusion.png" alt="Pizza" width="30" height="30" style="vertical-align: middle; margin-right: 10px;">Chicken & Corn Fusion Pizza</td>
+          <td class="price-cell">₹199</td>
+          <td class="price-cell">₹299</td>
+          <td><button class="btn add-btn" data-size="small">Add Small</button></td>
+          <td><button class="btn add-btn" data-size="large">Add Large</button></td>
+        </tr>
+        <tr data-pizza="Sweet Corn Supreme Pizza" data-large="249" data-small="149">
+          <td><img src="Corn Overload.png" alt="Pizza" width="30" height="30" style="vertical-align: middle; margin-right: 10px;">Sweet Corn Supreme Pizza</td>
+          <td class="price-cell">₹149</td>
+          <td class="price-cell">₹249</td>
+          <td><button class="btn add-btn" data-size="small">Add Small</button></td>
+          <td><button class="btn add-btn" data-size="large">Add Large</button></td>
+        </tr>
+        <tr data-pizza="Veggie Supreme Pizza" data-large="249" data-small="149">
+          <td><img src="veg supreme.png" alt="Pizza" width="30" height="30" style="vertical-align: middle; margin-right: 10px;">Veggie Supreme Pizza</td>
+          <td class="price-cell">₹149</td>
+          <td class="price-cell">₹249</td>
+          <td><button class="btn add-btn" data-size="small">Add Small</button></td>
+          <td><button class="btn add-btn" data-size="large">Add Large</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="cart">
+      <h3>Your Cart</h3>
+      <table id="cartTable">
+      <thead>
+        <tr>
+          <th>Pizza</th>
+          <th>Size</th>
+          <th>Price (₹)</th>
+          <th>Quantity</th>
+          <th>Change Size</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="empty-cart-row">
+          <td colspan="6" class="empty-cart">Your cart is empty.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Delivery Address</h3>
+    <textarea id="deliveryAddress" rows="3" placeholder="Enter your delivery address here"></textarea>
+
+    <h3>Coupon Code</h3>
+    <input type="text" id="couponCode" placeholder="Enter coupon code">
+
+    <div class="total" id="cartTotal">Total: ₹0</div>
+
+    <div class="actions">
+      <button id="copyOrderBtn" class="btn1">📋 Copy Order</button>
+      <a id="whatsappBtn" class="btn2" target="_blank" href="#">
+        <img src="whatsapp_icon.png" alt="WhatsApp" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
+        Send via WhatsApp
+      </a>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    const cart = [];
+
+    function renderCart() {
+      const cartTableBody = document.querySelector('#cartTable tbody');
+      cartTableBody.innerHTML = '';
+
+      if (cart.length === 0) {
+        cartTableBody.innerHTML = '<tr class="empty-cart-row"><td colspan="6" class="empty-cart">Your cart is empty.</td></tr>';
+        updateCartTotal();
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        const tr = document.createElement('tr');
+
+        const pizzaTd = document.createElement('td');
+        pizzaTd.textContent = item.pizza;
+        tr.appendChild(pizzaTd);
+
+        const sizeTd = document.createElement('td');
+        sizeTd.textContent = item.size;
+        tr.appendChild(sizeTd);
+
+        const priceTd = document.createElement('td');
+        priceTd.textContent = item.price;
+        tr.appendChild(priceTd);
+
+        const qtyTd = document.createElement('td');
+        const qtyInput = document.createElement('input');
+        qtyInput.type = 'number';
+        qtyInput.min = 1;
+        qtyInput.value = item.quantity;
+        qtyInput.className = 'cart-qty-input';
+        qtyInput.addEventListener('change', (e) => {
+          const val = parseInt(e.target.value);
+          if (val < 1 || isNaN(val)) {
+            e.target.value = item.quantity;
+            return;
+          }
+          item.quantity = val;
+          renderCart();
+        });
+        qtyTd.appendChild(qtyInput);
+        tr.appendChild(qtyTd);
+
+        // Size select dropdown in its own td
+        const sizeSelectTd = document.createElement('td');
+        const sizeSelect = document.createElement('select');
+        sizeSelect.innerHTML = '<option value="Small">Small</option><option value="Large">Large</option>';
+        sizeSelect.value = item.size;
+        sizeSelect.addEventListener('change', (e) => {
+          const newSize = e.target.value;
+          const tr = e.target.closest('tr');
+          const pizzaName = tr.querySelector('td').textContent;
+          const rowIndex = cart.findIndex(i => i.pizza === pizzaName && i.size === item.size);
+          if (rowIndex !== -1) {
+            const pizzaRow = document.querySelector(`#menuTable tbody tr[data-pizza="${pizzaName}"]`);
+            if (pizzaRow) {
+              const newPrice = newSize === 'Large' ? parseInt(pizzaRow.getAttribute('data-large')) : parseInt(pizzaRow.getAttribute('data-small'));
+              cart[rowIndex].size = newSize;
+              cart[rowIndex].price = newPrice;
+              renderCart();
+            }
+          }
+        });
+        sizeSelectTd.appendChild(sizeSelect);
+        tr.appendChild(sizeSelectTd);
+
+        // Delete button in its own td
+        const actionsTd = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className = 'cart-btn';
+        deleteBtn.addEventListener('click', () => {
+          cart.splice(index, 1);
+          renderCart();
+        });
+        actionsTd.appendChild(deleteBtn);
+        tr.appendChild(actionsTd);
+
+        cartTableBody.appendChild(tr);
+      });
+
+      updateCartTotal();
+    }
+
+    function addToCart(pizza, size, price) {
+      // Check if item already in cart with same pizza and size
+      const existingIndex = cart.findIndex(item => item.pizza === pizza && item.size === size);
+      if (existingIndex !== -1) {
+        cart[existingIndex].quantity += 1;
+      } else {
+        cart.push({ pizza, size, price, quantity: 1 });
+      }
+      renderCart();
+    }
+
+    function updateCartTotal() {
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+      });
+
+      // Apply coupon discount if valid
+      const couponCode = document.getElementById('couponCode').value.trim().toUpperCase();
+      const coupons = { SAVE50: 50, WELCOME10: 0.10 };
+      if (couponCode && coupons[couponCode]) {
+        if (coupons[couponCode] < 1) {
+          total -= total * coupons[couponCode];
+        } else {
+          total -= coupons[couponCode];
+        }
+      }
+
+      document.getElementById('cartTotal').textContent = `Total: ₹${total.toFixed(2)}`;
+    }
+
+    document.querySelectorAll('.add-btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const tr = e.target.closest('tr');
+        const pizza = tr.getAttribute('data-pizza');
+        const size = e.target.getAttribute('data-size');
+        const price = size === 'large' ? parseInt(tr.getAttribute('data-large')) : parseInt(tr.getAttribute('data-small'));
+        addToCart(pizza, size.charAt(0).toUpperCase() + size.slice(1), price);
+      });
+    });
+
+    document.getElementById('copyOrderBtn').addEventListener('click', () => {
+      let orderText = 'Order Details:\n';
+      cart.forEach((item, index) => {
+        orderText += `${index + 1}. ${item.pizza} - ${item.size} x${item.quantity} = ₹${item.price * item.quantity}\n`;
+      });
+      const address = document.getElementById('deliveryAddress').value.trim();
+      if (address) {
+        orderText += `Delivery Address: ${address}\n`;
+      }
+      const coupon = document.getElementById('couponCode').value.trim();
+      if (coupon) {
+        orderText += `Coupon Code: ${coupon}\n`;
+      }
+      orderText += document.getElementById('cartTotal').textContent;
+
+      navigator.clipboard.writeText(orderText).then(() => alert('Order copied to clipboard!'));
+    });
+
+    document.getElementById('whatsappBtn').addEventListener('click', () => {
+      let orderText = 'Order Details:%0A';
+      cart.forEach((item, index) => {
+        orderText += `${index + 1}. ${item.pizza} - ${item.size} x${item.quantity} = ₹${item.price * item.quantity}%0A`;
+      });
+      const address = document.getElementById('deliveryAddress').value.trim();
+      if (address) {
+        orderText += `Delivery Address: ${address}%0A`;
+      }
+      const coupon = document.getElementById('couponCode').value.trim();
+      if (coupon) {
+        orderText += `Coupon Code: ${coupon}%0A`;
+      }
+      orderText += document.getElementById('cartTotal').textContent;
+
+      const waLink = `https://wa.me/917349464989?text=${orderText}`;
+      document.getElementById('whatsappBtn').href = waLink;
+    });
+
+    renderCart();
+  </script>
+</body>
+
+</html>
