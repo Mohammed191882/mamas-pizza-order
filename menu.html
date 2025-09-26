@@ -606,16 +606,23 @@
           const newSize = e.target.value;
           const tr = e.target.closest('tr');
           const pizzaName = tr.querySelector('td').textContent;
-          const rowIndex = cart.findIndex(i => i.pizza === pizzaName && i.size === item.size);
-          if (rowIndex !== -1) {
+          const currentIndex = cart.findIndex(i => i.pizza === pizzaName && i.size === item.size);
+          if (currentIndex === -1) return;
+          const existingIndex = cart.findIndex(i => i.pizza === pizzaName && i.size === newSize);
+          if (existingIndex !== -1 && existingIndex !== currentIndex) {
+            // merge quantities
+            cart[existingIndex].quantity += cart[currentIndex].quantity;
+            cart.splice(currentIndex, 1);
+          } else {
+            // update size and price
             const pizzaRow = document.querySelector(`#menuTable tbody tr[data-pizza="${pizzaName}"]`);
             if (pizzaRow) {
               const newPrice = newSize === 'Large' ? parseInt(pizzaRow.getAttribute('data-large')) : parseInt(pizzaRow.getAttribute('data-small'));
-              cart[rowIndex].size = newSize;
-              cart[rowIndex].price = newPrice;
-              renderCart();
+              cart[currentIndex].size = newSize;
+              cart[currentIndex].price = newPrice;
             }
           }
+          renderCart();
         });
         sizeSelectTd.appendChild(sizeSelect);
         tr.appendChild(sizeSelectTd);
@@ -698,23 +705,26 @@
     });
 
     document.getElementById('whatsappBtn').addEventListener('click', () => {
-      let orderText = 'Order Details:%0A';
+      let orderText = 'Order Details:\n';
       cart.forEach((item, index) => {
-        orderText += `${index + 1}. ${item.pizza} - ${item.size} x${item.quantity} = ₹${item.price * item.quantity}%0A`;
+        orderText += `${index + 1}. ${item.pizza} - ${item.size} x${item.quantity} = ₹${(item.price * item.quantity).toFixed(2)}\n`;
       });
       const address = document.getElementById('deliveryAddress').value.trim();
       if (address) {
-        orderText += `Delivery Address: ${address}%0A`;
+        orderText += `Delivery Address: ${address}\n`;
       }
       const coupon = document.getElementById('couponCode').value.trim();
       if (coupon) {
-        orderText += `Coupon Code: ${coupon}%0A`;
+        orderText += `Coupon Code: ${coupon}\n`;
       }
-      orderText += document.getElementById('cartTotal').textContent;
+      orderText += '\n' + document.getElementById('cartTotal').textContent;
 
-      const waLink = `https://wa.me/917349464989?text=${orderText}`;
+      const encodedText = encodeURIComponent(orderText);
+      const waLink = `https://wa.me/917349464989?text=${encodedText}`;
       document.getElementById('whatsappBtn').href = waLink;
     });
+
+    document.getElementById('couponCode').addEventListener('input', updateCartTotal);
 
     renderCart();
   </script>
